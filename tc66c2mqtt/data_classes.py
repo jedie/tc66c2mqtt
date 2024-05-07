@@ -21,5 +21,5 @@ class TC66PollData:
     #
     temperature: int  # in Celsius
     #
-    dataPlus: float  # in Volts
-    dataMinus: float  # in Volts
+    data_plus: float  # in Volts
+    data_minus: float  # in Volts

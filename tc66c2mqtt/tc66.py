@@ -54,8 +54,8 @@ def parse_tc66_packet(data: bytes) -> TC66PollData | None:
     if temperature_sign:
         temperature = -temperature
 
-    dataPlus = float(int.from_bytes(pac2[32:36], 'little')) / 100
-    dataMinus = float(int.from_bytes(pac2[36:40], 'little')) / 100
+    data_plus = float(int.from_bytes(pac2[32:36], 'little')) / 100
+    data_minus = float(int.from_bytes(pac2[36:40], 'little')) / 100
 
     # pac2[40:60] contains unknown data -> ignore
     # CRC16: pac2[60:64]
@@ -86,6 +86,6 @@ def parse_tc66_packet(data: bytes) -> TC66PollData | None:
         #
         temperature=temperature,
         #
-        dataPlus=dataPlus,
-        dataMinus=dataMinus,
+        data_plus=data_plus,
+        data_minus=data_minus,
     )

@@ -54,10 +54,7 @@ async def device_info(*, device: BLEDevice, notify_handler):
         print(f'{rx_characteristic.properties=}')
 
         try:
-            count = 0
             while True:
-                count += 1
-                print(f'poll {count}...', flush=True, end='')
                 await client.write_gatt_char(char_specifier=tx_characteristic, data=ASK_FOR_VALUES_COMMAND)
                 await client.start_notify(char_specifier=rx_characteristic, callback=notify_handler)
                 time.sleep(1)
@@ -83,7 +80,7 @@ async def poll(device_name, poll_callback):
 
             seen_addresses.add(device.address)
 
-            print('New device found:', device)
+            print(f'New device {len(seen_addresses)} found:', device)
             print()
             print(advertisement_data)
             print()
