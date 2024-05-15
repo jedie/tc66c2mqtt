@@ -18,6 +18,14 @@ RDTech TC66C hardware info at sigrok:
 
  * https://sigrok.org/wiki/RDTech_TC66C
 
+## Screenshots
+
+### Home Assistant
+
+![tc66c2mqtt 2024-05-15 at 22-17-52 zero2w3 – Home Assistant.png](https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/tc66c2mqtt/tc66c2mqtt%202024-05-15%20at%2022-17-52%20zero2w3%20%E2%80%93%20Home%20Assistant.png "tc66c2mqtt 2024-05-15 at 22-17-52 zero2w3 – Home Assistant.png")
+
+### print data
+
 test print data in terminal looks like:
 
 ![2024-05-07_20-08_print_data.png](https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/tc66c2mqtt/2024-05-07_20-08_print_data.png "2024-05-07_20-08_print_data.png")
