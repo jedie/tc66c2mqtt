@@ -8,15 +8,24 @@
 
 Send MQTT events from RDTech TC66C device
 
-**under heavy development**
-
-
 Tested with [Joy-IT TC66C](https://joy-it.net/de/products/JT-TC66C).
 
 
 RDTech TC66C hardware info at sigrok:
 
  * https://sigrok.org/wiki/RDTech_TC66C
+
+
+## Bootstrap tc66c2mqtt
+
+Clone the sources and just call the CLI to create a Python Virtualenv, e.g.:
+
+```bash
+~$ git clone https://github.com/jedie/tc66c2mqtt.git
+~$ cd tc66c2mqtt
+~/tc66c2mqtt$ ./cli.py --help
+```
+
 
 ## Screenshots
 
