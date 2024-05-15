@@ -38,6 +38,18 @@ class Tc66cMqttHandler:
             sw_version=parsed_data.version,
             config_throttle_sec=self.user_settings.mqtt.publish_config_throttle_seconds,
         )
+
+        #################################################################################
+
+        self.number_of_runs = Sensor(
+            device=self.mqtt_device,
+            name='Number Of Runs',
+            uid='number_of_runs',
+            state_class='measurement',
+        )
+
+        #################################################################################
+
         self.voltage = Sensor(
             device=self.mqtt_device,
             name='Voltage',
@@ -66,6 +78,28 @@ class Tc66cMqttHandler:
             suggested_display_precision=3,
         )
 
+        #################################################################################
+
+        self.resistor = Sensor(
+            device=self.mqtt_device,
+            name='Resistor',
+            uid='resistor',
+            state_class='measurement',
+            unit_of_measurement='Ω',
+            suggested_display_precision=1,
+        )
+
+        #################################################################################
+
+        self.group0Ah = Sensor(
+            device=self.mqtt_device,
+            name='Group 0 Ah',
+            uid='group0Ah',
+            state_class='measurement',
+            unit_of_measurement='Ah',
+            suggested_display_precision=3,
+        )
+
     def __call__(self, *, parsed_data: TC66PollData):
         print(parsed_data)
 
@@ -73,6 +107,13 @@ class Tc66cMqttHandler:
             self.init_device(parsed_data=parsed_data)
 
         self.main_device.poll_and_publish(self.mqtt_client)
+
+        #################################################################################
+
+        self.number_of_runs.set_state(parsed_data.number_of_runs)
+        self.number_of_runs.publish(self.mqtt_client)
+
+        #################################################################################
 
         self.voltage.set_state(parsed_data.voltage)
         self.voltage.publish(self.mqtt_client)
@@ -82,3 +123,10 @@ class Tc66cMqttHandler:
 
         self.power.set_state(parsed_data.power)
         self.power.publish(self.mqtt_client)
+
+        #################################################################################
+
+        self.resistor.set_state(parsed_data.resistor)
+        self.resistor.publish(self.mqtt_client)
+
+        #################################################################################
