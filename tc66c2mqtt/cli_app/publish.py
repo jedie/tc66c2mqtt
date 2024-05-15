@@ -20,7 +20,7 @@ def publish_loop(verbosity: int):
     setup_logging(verbosity=verbosity)
     user_settings: UserSettings = get_user_settings(verbosity=verbosity)
 
-    tc66c_mqtt_handler = Tc66cMqttHandler(user_settings=user_settings, verbosity=verbosity,)
+    tc66c_mqtt_handler = Tc66cMqttHandler(user_settings=user_settings, verbosity=verbosity)
 
     while True:
         try:
@@ -30,7 +30,10 @@ def publish_loop(verbosity: int):
                     poll_callback=tc66c_mqtt_handler,
                 )
             )
+        except TimeoutError:
+            print('Timeout... Retrying in 1 second...')
+            time.sleep(1)
         except Exception as e:
-            print(f'Error: {e}')
+            print(f'Error: {e}', type(e))
             print('Retrying in 1 second...')
             time.sleep(1)

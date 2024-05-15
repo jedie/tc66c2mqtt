@@ -83,8 +83,6 @@ class StatsOut:
             unit='V',
         )
 
-
-
     def __enter__(self):
         return self
 
