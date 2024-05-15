@@ -5,26 +5,53 @@ from tc66c2mqtt.data_classes import TC66PollData
 logger = logging.getLogger(__name__)
 
 
+def parse_bytes(data: bytes, scale: float | None = None):
+    """
+    >>> parse_bytes(b'\\x01\\x00', 1)
+    1.0
+    >>> parse_bytes(b'\\x02\\x00\\x00\\x00', 1000)
+    0.002
+    >>> parse_bytes(b'\\x03\\x00')
+    3
+    """
+    value = int.from_bytes(data, 'little')
+    if scale is None:
+        return value
+    return float(value) / scale
+
+
+def validate_prefix(data: bytes, prefix: str):
+    """
+    >>> validate_prefix(b'pac1data', 'pac1')
+    True
+    >>> validate_prefix(b'foobar', 'pac1')
+    False
+    """
+    return data[:4] == prefix.encode()
+
+
 def parse_tc66_packet(data: bytes) -> TC66PollData | None:
     """
     https://sigrok.org/wiki/RDTech_TC66C#Protocol_response_format_(%22Poll_data%22)
     """
-    pac1: bytes = data[:64]
-    logging.debug(f'{pac1=}')
-    pac1prefix = pac1[:4]
-    if pac1prefix != b'pac1':
-        logger.error(f'Invalid prefix {pac1prefix=}')
+    pac1, pac2, pac3 = data[:64], data[64:128], data[128:192]
+
+    if not all([validate_prefix(pac, f'pac{i}') for i, pac in enumerate([pac1, pac2, pac3], start=1)]):
+        logger.error('Invalid prefixes!')
         return None
+
+    ###################################################################
+    # pac1 values:
 
     product_name = pac1[4:8].decode('utf-8')  # Product name, e.g.: "TC66"
     version = pac1[8:12].decode('utf-8')  # Version (e.g., 1.14)
-    serial = int.from_bytes(pac1[12:16], 'little')
+    serial = parse_bytes(pac1[12:16])
 
-    number_of_runs = int.from_bytes(pac1[44:48], 'little')
+    number_of_runs = parse_bytes(pac1[44:48])
 
-    voltage = float(int.from_bytes(pac1[48:52], 'little')) / 10_000
-    current = float(int.from_bytes(pac1[52:56], 'little')) / 100_000
-    power = float(int.from_bytes(pac1[56:60], 'little')) / 10_000
+    voltage = parse_bytes(pac1[48:52], scale=10_000)
+    current = parse_bytes(pac1[52:56], scale=100_000)
+    power = parse_bytes(pac1[56:60], scale=10_000)
 
     # Compare V * A = W ;)
     power_calc = voltage * current
@@ -32,40 +59,33 @@ def parse_tc66_packet(data: bytes) -> TC66PollData | None:
     if diff > 0.0002:
         logger.warning(f'Power calculation diff: {power=}, {power_calc=} ({diff=})')
 
-    # CRC16: pac1[60:64]
+    # pac1[60:64] contains CRC16/MODBUS
 
-    pac2 = data[64:128]
-    logging.debug(f'{pac2=}')
-    pac2prefix = pac2[:4]
-    if pac2prefix != b'pac2':
-        logger.error(f'Invalid prefix {pac2prefix=}')
-        return None
+    ###################################################################
+    # pac2 values:
 
-    resistor = float(int.from_bytes(pac2[4:8], 'little')) / 10
+    resistor = parse_bytes(pac2[4:8], scale=10)
 
-    group0Ah = float(int.from_bytes(pac2[8:12], 'little')) / 1_000
-    group0Wh = float(int.from_bytes(pac2[12:16], 'little')) / 1_000
+    group0Ah = parse_bytes(pac2[8:12], scale=1_000)
+    group0Wh = parse_bytes(pac2[12:16], scale=1_000)
 
-    group1Ah = float(int.from_bytes(pac2[16:20], 'little')) / 1_000
-    group1Wh = float(int.from_bytes(pac2[20:24], 'little')) / 1_000
+    group1Ah = parse_bytes(pac2[16:20], scale=1_000)
+    group1Wh = parse_bytes(pac2[20:24], scale=1_000)
 
-    temperature_sign = int.from_bytes(pac2[24:28], 'little')
-    temperature = int.from_bytes(pac2[28:32], 'little')
+    temperature_sign = parse_bytes(pac2[24:28])
+    temperature = parse_bytes(pac2[28:32])
     if temperature_sign:
         temperature = -temperature
 
-    data_plus = float(int.from_bytes(pac2[32:36], 'little')) / 100
-    data_minus = float(int.from_bytes(pac2[36:40], 'little')) / 100
+    data_plus = parse_bytes(pac2[32:36], scale=100)
+    data_minus = parse_bytes(pac2[36:40], scale=100)
 
     # pac2[40:60] contains unknown data -> ignore
-    # CRC16: pac2[60:64]
+    # pac2[60:64] contains CRC16/MODBUS
+
+    ###################################################################
+    # pac3 values:
     # pac3 = data[128:192] -> All data are unknown
-    pac3: bytes = data[128:192]
-    logging.debug(f'{pac3=}')
-    pac3prefix = pac3[:4]
-    if pac3prefix != b'pac3':
-        logger.error(f'Invalid prefix {pac3prefix=}')
-        return None
 
     return TC66PollData(
         product_name=product_name,
