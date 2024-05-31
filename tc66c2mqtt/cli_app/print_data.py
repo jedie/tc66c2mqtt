@@ -88,6 +88,10 @@ class StatsOut:
 
     def __call__(self, *, parsed_data: TC66PollData):
         if self.live is None:
+            print(
+                f'\n\n{parsed_data.product_name} v{parsed_data.version}'
+                f' Serial: {parsed_data.serial} (Number of runs: {parsed_data.number_of_runs})'
+            )
             self.live = Live(self.progress, refresh_per_second=10)
             self.live.__enter__()
 
