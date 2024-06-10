@@ -7,11 +7,12 @@ readme = "README.md"
 authors = [
     {name = 'Jens Diemer', email = 'github@jensdiemer.de'}
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "ha-services>=2.5.0",  # https://github.com/jedie/ha-services
     "pycryptodome",  # https://github.com/Legrandin/pycryptodome/
     "bleak",  # https://github.com/hbldh/bleak
+    "kaitaistruct", # https://github.com/kaitai-io/kaitai_struct_python_runtime
     "cli-base-utilities>=0.8.0",  # https://github.com/jedie/cli-base-utilities
     "bx_py_utils",  # https://github.com/boxine/bx_py_utils
     "click",  # https://github.com/pallets/click/
@@ -120,7 +121,7 @@ exclude_lines = [
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py{312,311,310,39}
+envlist = py{312,311,310}
 skip_missing_interpreters = True
 
 [testenv]

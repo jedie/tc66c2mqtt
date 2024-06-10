@@ -16,6 +16,11 @@ RDTech TC66C hardware info at sigrok:
  * https://sigrok.org/wiki/RDTech_TC66C
 
 
+Used [Kaitai Struct](https://kaitai.io/) to parse the binary data from the TC66C device.
+See: [tc66c.ksy](https://github.com/jedie/tc66c2mqtt/blob/main/tc66c2mqtt/tc66c.ksy)
+and [tc66c.py](https://github.com/jedie/tc66c2mqtt/blob/main/tc66c2mqtt/tc66c.py).
+
+
 ## Bootstrap tc66c2mqtt
 
 Clone the sources and just call the CLI to create a Python Virtualenv, e.g.:

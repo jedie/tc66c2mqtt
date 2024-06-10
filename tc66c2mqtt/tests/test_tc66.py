@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from tc66c2mqtt.data_classes import TC66PollData
 from tc66c2mqtt.tc66 import parse_tc66_packet
-from tc66c2mqtt.tests.fixtures import DECRYPTED_DATA
+from tc66c2mqtt.tests.fixtures import get_dectyped_data
 
 
 class Tc66TestCase(TestCase):
@@ -10,7 +10,8 @@ class Tc66TestCase(TestCase):
         # V: 5.1609       I: 0.0199       W: 0.1026
         # Ω: 259.3        mAh: 0.0        mWh: 5.0        mAh: 0.0        mWh: 0.0
         # Temp: 27.0      D+: 2.81        D-: 2.8
-        data: TC66PollData = parse_tc66_packet(DECRYPTED_DATA)
+        tc66_packet: bytes = get_dectyped_data()
+        data: TC66PollData = parse_tc66_packet(tc66_packet)
         self.assertEqual(data.product_name, 'TC66')
         self.assertEqual(
             data,
@@ -32,3 +33,7 @@ class Tc66TestCase(TestCase):
                 data_minus=2.8,
             ),
         )
+
+        with self.assertLogs() as cm:
+            self.assertIsNone(parse_tc66_packet(b'invalid'))
+        self.assertIn('Failed to parse TC66 packet data', cm.output[0])
