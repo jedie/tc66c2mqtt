@@ -1,7 +1,7 @@
 [project]
 name = "tc66c2mqtt"
 dynamic = ["version"]
-description = "Sen MQTT events from TC66C device"
+description = "Sends MQTT events from TC66C device"
 license = {text = "GPL-3.0-or-later"}
 readme = "README.md"
 authors = [
@@ -155,7 +155,7 @@ github_username = "jedie"
 author_email = "github@jensdiemer.de"
 package_name = "tc66c2mqtt"
 package_version = "0.0.1"
-package_description = "Sen MQTT events from TC66C device"
+package_description = "Sends MQTT events from TC66C device"
 package_url = "https://github.com/jedie/tc66c2mqtt"
 issues_url = "https://github.com/jedie/tc66c2mqtt/issues"
 license = "GPL-3.0-or-later"

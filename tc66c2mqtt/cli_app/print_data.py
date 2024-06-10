@@ -46,22 +46,22 @@ class StatsOut:
         )
 
         self.group0Ah_task_id: TaskID = self.progress.add_task(
-            description='[green]group 0 Ah',
+            description='[green]Group 0 Ah',
             total=10000,
             unit='Ah',
         )
         self.group0Wh_task_id: TaskID = self.progress.add_task(
-            description='[green]group 0 Wh',
+            description='[green]Group 0 Wh',
             total=10000,
             unit='Wh',
         )
         self.group1Ah_task_id: TaskID = self.progress.add_task(
-            description='[green]group 1 Ah',
+            description='[green]Group 1 Ah',
             total=10000,
             unit='Ah',
         )
         self.group1Wh_task_id: TaskID = self.progress.add_task(
-            description='[green]group 1 Wh',
+            description='[green]Group 1 Wh',
             total=10000,
             unit='Wh',
         )
