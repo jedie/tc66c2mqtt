@@ -86,7 +86,7 @@ class StatsOut:
     def __enter__(self):
         return self
 
-    def __call__(self, *, parsed_data: TC66PollData):
+    def __call__(self, *, crypted_data: bytes, decoded_data: bytes, parsed_data: TC66PollData):
         if self.live is None:
             print(
                 f'\n\n{parsed_data.product_name} v{parsed_data.version}'

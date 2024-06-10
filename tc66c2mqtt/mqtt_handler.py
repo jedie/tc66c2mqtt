@@ -33,7 +33,7 @@ class Tc66cMqttHandler:
         self.mqtt_device = MqttDevice(
             main_device=self.main_device,
             name=self.device_name,
-            uid=str(parsed_data.serial),
+            uid=parsed_data.product_name,
             manufacturer='RDTech',
             sw_version=parsed_data.version,
             config_throttle_sec=self.user_settings.mqtt.publish_config_throttle_seconds,
@@ -94,14 +94,39 @@ class Tc66cMqttHandler:
         self.group0Ah = Sensor(
             device=self.mqtt_device,
             name='Group 0 Ah',
-            uid='group0Ah',
+            uid='group0ah',
             state_class='measurement',
             unit_of_measurement='Ah',
             suggested_display_precision=3,
         )
+        self.group0Wh = Sensor(
+            device=self.mqtt_device,
+            name='Group 0 Wh',
+            uid='group0wh',
+            state_class='measurement',
+            unit_of_measurement='Wh',
+            suggested_display_precision=3,
+        )
 
-    def __call__(self, *, parsed_data: TC66PollData):
-        print(parsed_data)
+        self.group1Ah = Sensor(
+            device=self.mqtt_device,
+            name='Group 1 Ah',
+            uid='group1ah',
+            state_class='measurement',
+            unit_of_measurement='Ah',
+            suggested_display_precision=3,
+        )
+        self.group1Wh = Sensor(
+            device=self.mqtt_device,
+            name='Group 1 Wh',
+            uid='group1wh',
+            state_class='measurement',
+            unit_of_measurement='Wh',
+            suggested_display_precision=3,
+        )
+
+    def __call__(self, *, crypted_data: bytes, decoded_data: bytes, parsed_data: TC66PollData):
+        logger.info(f'Parsed data: {parsed_data}')
 
         if self.main_device is None:
             self.init_device(parsed_data=parsed_data)
@@ -130,3 +155,15 @@ class Tc66cMqttHandler:
         self.resistor.publish(self.mqtt_client)
 
         #################################################################################
+
+        self.group0Ah.set_state(parsed_data.group0Ah)
+        self.group0Ah.publish(self.mqtt_client)
+
+        self.group0Wh.set_state(parsed_data.group0Wh)
+        self.group0Wh.publish(self.mqtt_client)
+
+        self.group1Ah.set_state(parsed_data.group1Ah)
+        self.group1Ah.publish(self.mqtt_client)
+
+        self.group1Wh.set_state(parsed_data.group1Wh)
+        self.group1Wh.publish(self.mqtt_client)

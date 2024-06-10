@@ -12,13 +12,14 @@ from tc66c2mqtt.constants import (
 )
 from tc66c2mqtt.tc66 import parse_tc66_packet
 from tc66c2mqtt.tc66_decryptor import tc66_decryptor
+from tc66c2mqtt.types import PollCallbackProtocol
 
 
 logger = logging.getLogger(__name__)
 
 
 class NotificationHandler:
-    def __init__(self, poll_callback):
+    def __init__(self, poll_callback: PollCallbackProtocol):
         self.poll_callback = poll_callback
 
     def __call__(self, sender, data: bytearray):
@@ -29,7 +30,11 @@ class NotificationHandler:
 
         decoded_data = tc66_decryptor(crypted_data=data)
         if parsed_data := parse_tc66_packet(decoded_data):
-            self.poll_callback(parsed_data=parsed_data)
+            self.poll_callback(
+                crypted_data=data,
+                decoded_data=decoded_data,
+                parsed_data=parsed_data,
+            )
         else:
             logger.error('Error parsing data: %r', decoded_data)
 
@@ -63,7 +68,7 @@ async def device_info(*, device: BLEDevice, notify_handler):
             await client.stop_notify(char_specifier=rx_characteristic)
 
 
-async def poll(device_name, poll_callback):
+async def poll(device_name, poll_callback: PollCallbackProtocol):
 
     notify_handler = NotificationHandler(poll_callback)
 

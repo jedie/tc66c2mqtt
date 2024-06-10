@@ -18,12 +18,26 @@ def install():
     verbose_check_call('pip', 'install', '--no-deps', '-e', '.')
 
 
+def _call_safety():
+    """
+    Run safety check against current requirements files
+    """
+    verbose_check_call(
+        'safety',
+        'check',
+        '--ignore',
+        '70612',  # Jinja2 Server Side Template Injection (SSTI)
+        '-r',
+        'requirements.dev.txt',
+    )
+
+
 @cli.command()
 def safety():
     """
     Run safety check against current requirements files
     """
-    verbose_check_call('safety', 'check', '-r', 'requirements.dev.txt')
+    _call_safety()
 
 
 @cli.command()
@@ -68,7 +82,7 @@ def update():
         extra_env=extra_env,
     )
 
-    verbose_check_call(bin_path / 'safety', 'check', '-r', 'requirements.dev.txt')
+    _call_safety()  # Check new dependencies for known security issues
 
     # Install new dependencies in current .venv:
     verbose_check_call(bin_path / 'pip-sync', 'requirements.dev.txt')
