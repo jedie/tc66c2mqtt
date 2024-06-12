@@ -88,6 +88,22 @@ class Tc66cMqttHandler:
             unit_of_measurement='Ω',
             suggested_display_precision=1,
         )
+        self.delta_plus = Sensor(
+            device=self.mqtt_device,
+            name='Delta +',
+            uid='delta_plus',
+            state_class='measurement',
+            unit_of_measurement='V',
+            suggested_display_precision=3,
+        )
+        self.delta_minus = Sensor(
+            device=self.mqtt_device,
+            name='Delta -',
+            uid='delta_minus',
+            state_class='measurement',
+            unit_of_measurement='V',
+            suggested_display_precision=3,
+        )
 
         #################################################################################
 
@@ -125,6 +141,17 @@ class Tc66cMqttHandler:
             suggested_display_precision=3,
         )
 
+        #################################################################################
+
+        self.temperature = Sensor(
+            device=self.mqtt_device,
+            name='Temperature',
+            uid='temperature',
+            state_class='measurement',
+            unit_of_measurement='°C',
+            suggested_display_precision=1,
+        )
+
     def __call__(self, *, crypted_data: bytes, decoded_data: bytes, parsed_data: TC66PollData):
         logger.info(f'Parsed data: {parsed_data}')
 
@@ -154,6 +181,12 @@ class Tc66cMqttHandler:
         self.resistor.set_state(parsed_data.resistor)
         self.resistor.publish(self.mqtt_client)
 
+        self.delta_plus.set_state(parsed_data.data_plus)
+        self.delta_plus.publish(self.mqtt_client)
+
+        self.delta_minus.set_state(parsed_data.data_minus)
+        self.delta_minus.publish(self.mqtt_client)
+
         #################################################################################
 
         self.group0Ah.set_state(parsed_data.group0Ah)
@@ -167,3 +200,8 @@ class Tc66cMqttHandler:
 
         self.group1Wh.set_state(parsed_data.group1Wh)
         self.group1Wh.publish(self.mqtt_client)
+
+        #################################################################################
+
+        self.temperature.set_state(parsed_data.temperature)
+        self.temperature.publish(self.mqtt_client)
