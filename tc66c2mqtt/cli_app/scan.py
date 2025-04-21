@@ -1,7 +1,6 @@
 import asyncio
 from pprint import pprint
 
-
 from bleak import AdvertisementData, BleakClient, BLEDevice
 from cli_base.cli_tools.verbosity import setup_logging
 from cli_base.tyro_commands import TyroVerbosityArgType
@@ -60,12 +59,15 @@ def scan(verbosity: TyroVerbosityArgType):
         pprint(devices)
 
         for d in devices:
-            async with BleakClient(d) as client:
-                print(client.services)
+            try:
+                async with BleakClient(d) as client:
+                    print(client.services)
+            except TimeoutError as err:
+                print('Timeout:', err)
 
         print('-' * 79)
 
-        async with BleakScanner(scanning_mode='passive') as scanner:
+        async with BleakScanner(scanning_mode='active') as scanner:
             seen_addresses = set()
             print('Scanning...\n')
 
