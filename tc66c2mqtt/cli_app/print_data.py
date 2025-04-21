@@ -1,16 +1,17 @@
 import asyncio
 import time
 
-import rich_click as click
-from cli_base.cli_tools.verbosity import OPTION_KWARGS_VERBOSE, setup_logging
+
+from cli_base.cli_tools.verbosity import setup_logging
+from cli_base.tyro_commands import TyroVerbosityArgType
 from rich import print  # noqa
 from rich.live import Live
 from rich.progress import BarColumn, Progress, TaskID, TextColumn
 
-from tc66c2mqtt.cli_app import cli
-from tc66c2mqtt.constants import DEFAULT_DEVICE_NAME
+from tc66c2mqtt.cli_app import app
 from tc66c2mqtt.data_classes import TC66PollData
 from tc66c2mqtt.tc66c_bluetooth import poll
+from tc66c2mqtt.types import TyroDeviceNameArgType
 
 
 class StatsOut:
@@ -117,15 +118,8 @@ class StatsOut:
             self.live.__exit__(exc_type, exc_val, exc_tb)
 
 
-@cli.command()
-@click.option('-v', '--verbosity', **OPTION_KWARGS_VERBOSE)
-@click.option(
-    '--device-name',
-    default=DEFAULT_DEVICE_NAME,
-    show_default=True,
-    help='Bluetooth device name',
-)
-def print_data(verbosity: int, device_name: str):
+@app.command
+def print_data(verbosity: TyroVerbosityArgType, device_name: TyroDeviceNameArgType):
     """
     Print TC66C data to console
     """

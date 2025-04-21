@@ -3,7 +3,6 @@
     through `python -m tc66c2mqtt`.
 """
 
-
 from tc66c2mqtt.cli_app import main
 
 

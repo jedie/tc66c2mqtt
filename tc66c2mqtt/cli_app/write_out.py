@@ -4,16 +4,18 @@ import datetime
 import json
 import time
 from pathlib import Path
+from typing import Annotated
 
-import rich_click as click
-from cli_base.cli_tools.verbosity import OPTION_KWARGS_VERBOSE, setup_logging
+import tyro
+from cli_base.cli_tools.verbosity import setup_logging
+from cli_base.tyro_commands import TyroVerbosityArgType
 from rich import print  # noqa
 
-from tc66c2mqtt.cli_app import cli
-from tc66c2mqtt.constants import DEFAULT_DEVICE_NAME
+from tc66c2mqtt.cli_app import app
 from tc66c2mqtt.data_classes import TC66PollData
 from tc66c2mqtt.tc66c import Tc66c
 from tc66c2mqtt.tc66c_bluetooth import poll
+from tc66c2mqtt.types import TyroDeviceNameArgType
 
 
 class FileWriter:
@@ -50,21 +52,17 @@ class FileWriter:
             return False
 
 
-@cli.command()
-@click.option('-v', '--verbosity', **OPTION_KWARGS_VERBOSE)
-@click.option(
-    '--device-name',
-    default=DEFAULT_DEVICE_NAME,
-    show_default=True,
-    help='Bluetooth device name',
-)
-@click.option(
-    '--count',
-    default=10,
-    show_default=True,
-    help='Number of files to write',
-)
-def write(verbosity: int, device_name: str, count: int):
+TyroCountArgType = Annotated[
+    int,
+    tyro.conf.arg(
+        default=10,
+        help='Number of files to write',
+    ),
+]
+
+
+@app.command
+def write(verbosity: TyroVerbosityArgType, device_name: TyroDeviceNameArgType, count: TyroCountArgType):
     """
     Write files from TC66C data to disk.
     """
