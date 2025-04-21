@@ -46,6 +46,7 @@ class Tc66cMqttHandler:
             name='Number Of Runs',
             uid='number_of_runs',
             state_class='measurement',
+            min_value=0,
         )
 
         #################################################################################
@@ -58,6 +59,8 @@ class Tc66cMqttHandler:
             state_class='measurement',
             unit_of_measurement='V',
             suggested_display_precision=3,
+            min_value=0,  # Properly min. 5V, isn't it?
+            max_value=30,
         )
         self.current = Sensor(
             device=self.mqtt_device,
@@ -67,6 +70,8 @@ class Tc66cMqttHandler:
             state_class='measurement',
             unit_of_measurement='A',
             suggested_display_precision=3,
+            min_value=0,
+            max_value=5,
         )
         self.power = Sensor(
             device=self.mqtt_device,
@@ -76,6 +81,8 @@ class Tc66cMqttHandler:
             state_class='measurement',
             unit_of_measurement='W',
             suggested_display_precision=3,
+            min_value=0,
+            max_value=30 * 5,
         )
 
         #################################################################################
@@ -87,6 +94,7 @@ class Tc66cMqttHandler:
             state_class='measurement',
             unit_of_measurement='Ω',
             suggested_display_precision=1,
+            min_value=0,
         )
         self.data_plus = Sensor(
             device=self.mqtt_device,
@@ -114,6 +122,7 @@ class Tc66cMqttHandler:
             state_class='measurement',
             unit_of_measurement='Ah',
             suggested_display_precision=3,
+            min_value=0,
         )
         self.group0Wh = Sensor(
             device=self.mqtt_device,
@@ -122,6 +131,7 @@ class Tc66cMqttHandler:
             state_class='measurement',
             unit_of_measurement='Wh',
             suggested_display_precision=3,
+            min_value=0,
         )
 
         self.group1Ah = Sensor(
@@ -131,6 +141,7 @@ class Tc66cMqttHandler:
             state_class='measurement',
             unit_of_measurement='Ah',
             suggested_display_precision=3,
+            min_value=0,
         )
         self.group1Wh = Sensor(
             device=self.mqtt_device,
@@ -139,6 +150,7 @@ class Tc66cMqttHandler:
             state_class='measurement',
             unit_of_measurement='Wh',
             suggested_display_precision=3,
+            min_value=0,
         )
 
         #################################################################################
@@ -150,6 +162,10 @@ class Tc66cMqttHandler:
             state_class='measurement',
             unit_of_measurement='°C',
             suggested_display_precision=1,
+            # From the docs, it's only 0-80°C and the device usage temperature is ony 0-45°C
+            # But it seems that can be also negative, so guess:
+            min_value=-20,
+            max_value=80,
         )
 
     def __call__(self, *, crypted_data: bytes, decoded_data: bytes, parsed_data: TC66PollData):

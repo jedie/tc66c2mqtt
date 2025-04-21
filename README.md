@@ -142,6 +142,8 @@ test print data in terminal looks like:
 
 [comment]: <> (✂✂✂ auto generated history start ✂✂✂)
 
+* [v0.4.1](https://github.com/jedie/tc66c2mqtt/compare/v0.4.0...v0.4.1)
+  * 2025-04-21 - Set min/max validation values in MQTT components of ha-services
 * [v0.4.0](https://github.com/jedie/tc66c2mqtt/compare/v0.3.0...v0.4.0)
   * 2025-04-21 - Update README.md
   * 2025-04-21 - bugfix scan
@@ -157,12 +159,12 @@ test print data in terminal looks like:
   * 2024-05-31 - Update requirements
   * 2024-05-31 - print device info
   * 2024-05-15 - Simplify parsing TC66 data
-* [v0.1.1](https://github.com/jedie/tc66c2mqtt/compare/v0.1.0...v0.1.1)
-  * 2024-05-15 - README
-  * 2024-05-15 - Update README.md
 
 <details><summary>Expand older history entries ...</summary>
 
+* [v0.1.1](https://github.com/jedie/tc66c2mqtt/compare/v0.1.0...v0.1.1)
+  * 2024-05-15 - README
+  * 2024-05-15 - Update README.md
 * [v0.1.0](https://github.com/jedie/tc66c2mqtt/compare/a912ba9...v0.1.0)
   * 2024-05-15 - Update requirements
   * 2024-05-15 - Handle TimeoutError seperate
