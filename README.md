@@ -131,6 +131,10 @@ st-snapshot-files,version}
 
 test print data in terminal looks like:
 
+```bash
+~/tc66c2mqtt$ ./cli.py print-data
+```
+
 ![2024-05-07_20-08_print_data.png](https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/tc66c2mqtt/2024-05-07_20-08_print_data.png "2024-05-07_20-08_print_data.png")
 
 
