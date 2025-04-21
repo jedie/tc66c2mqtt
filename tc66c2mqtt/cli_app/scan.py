@@ -1,10 +1,11 @@
 import asyncio
-
-from bleak import AdvertisementData, BleakClient, BleakScanner, BLEDevice
+from pprint import pprint
 
 import rich_click as click
+from bleak import AdvertisementData, BleakClient, BLEDevice
 from cli_base.cli_tools.verbosity import OPTION_KWARGS_VERBOSE, setup_logging
 from rich import print  # noqa
+
 from tc66c2mqtt.cli_app import cli
 
 
@@ -48,7 +49,23 @@ def scan(verbosity: int):
                 print()
 
     async def main():
-        async with BleakScanner() as scanner:
+        from collections.abc import Sequence
+
+        from bleak import BleakClient, BleakScanner
+        from bleak.backends.device import BLEDevice
+
+        print('Discovering devices...')
+        devices: Sequence[BLEDevice] = await BleakScanner.discover(timeout=5.0)
+        print('Discovered:')
+        pprint(devices)
+
+        for d in devices:
+            async with BleakClient(d) as client:
+                print(client.services)
+
+        print('-' * 79)
+
+        async with BleakScanner(scanning_mode='passive') as scanner:
             seen_addresses = set()
             print('Scanning...\n')
 
@@ -64,6 +81,9 @@ def scan(verbosity: int):
                 print()
                 print(advertisement_data)
                 print()
-                await device_info(device)
+                try:
+                    await device_info(device)
+                except TimeoutError as err:
+                    print('Timeout:', err)
 
     asyncio.run(main())
