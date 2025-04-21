@@ -1,17 +1,17 @@
 import asyncio
 from pprint import pprint
 
-import rich_click as click
+
 from bleak import AdvertisementData, BleakClient, BLEDevice
-from cli_base.cli_tools.verbosity import OPTION_KWARGS_VERBOSE, setup_logging
+from cli_base.cli_tools.verbosity import setup_logging
+from cli_base.tyro_commands import TyroVerbosityArgType
 from rich import print  # noqa
 
-from tc66c2mqtt.cli_app import cli
+from tc66c2mqtt.cli_app import app
 
 
-@cli.command()
-@click.option('-v', '--verbosity', **OPTION_KWARGS_VERBOSE)
-def scan(verbosity: int):
+@app.command
+def scan(verbosity: TyroVerbosityArgType):
     """
     Discover Bluetooth devices and there services/descriptors
     """

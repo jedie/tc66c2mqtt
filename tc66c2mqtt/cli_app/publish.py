@@ -1,19 +1,19 @@
 import asyncio
 import time
 
-import rich_click as click
-from cli_base.cli_tools.verbosity import OPTION_KWARGS_VERBOSE, setup_logging
+
+from cli_base.cli_tools.verbosity import setup_logging
+from cli_base.tyro_commands import TyroVerbosityArgType
 from rich import print  # noqa
 
-from tc66c2mqtt.cli_app import cli
+from tc66c2mqtt.cli_app import app
 from tc66c2mqtt.mqtt_handler import Tc66cMqttHandler
 from tc66c2mqtt.tc66c_bluetooth import poll
 from tc66c2mqtt.user_settings import UserSettings, get_user_settings
 
 
-@cli.command()
-@click.option('-v', '--verbosity', **OPTION_KWARGS_VERBOSE)
-def publish_loop(verbosity: int):
+@app.command
+def publish_loop(verbosity: TyroVerbosityArgType):
     """
     Print TC66C data to console
     """

@@ -4,6 +4,7 @@ import sys
 
 from cli_base.systemd.data_classes import BaseSystemdServiceInfo, BaseSystemdServiceTemplateContext
 from cli_base.toml_settings.api import TomlSettings
+from cli_base.tyro_commands import TyroVerbosityArgType
 from ha_services.mqtt4homeassistant.data_classes import MqttSettings
 from rich import print  # noqa
 
@@ -58,7 +59,7 @@ def get_toml_settings() -> TomlSettings:
     )
 
 
-def get_user_settings(verbosity: int) -> UserSettings:
+def get_user_settings(verbosity: TyroVerbosityArgType) -> UserSettings:
     toml_settings: TomlSettings = get_toml_settings()
     user_settings: UserSettings = toml_settings.get_user_settings(debug=verbosity > 0)
     return user_settings
