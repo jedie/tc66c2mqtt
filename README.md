@@ -131,6 +131,10 @@ st-snapshot-files,version}
 
 test print data in terminal looks like:
 
+```bash
+~/tc66c2mqtt$ ./cli.py print-data
+```
+
 ![2024-05-07_20-08_print_data.png](https://raw.githubusercontent.com/jedie/jedie.github.io/master/screenshots/tc66c2mqtt/2024-05-07_20-08_print_data.png "2024-05-07_20-08_print_data.png")
 
 
@@ -139,6 +143,7 @@ test print data in terminal looks like:
 [comment]: <> (✂✂✂ auto generated history start ✂✂✂)
 
 * [v0.4.0](https://github.com/jedie/tc66c2mqtt/compare/v0.3.0...v0.4.0)
+  * 2025-04-21 - Update README.md
   * 2025-04-21 - bugfix scan
   * 2025-04-21 - update CLI to tyro
   * 2025-04-21 - migrate pip-tools to uv
