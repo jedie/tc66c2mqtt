@@ -31,6 +31,7 @@ Clone the sources and just call the CLI to create a Python Virtualenv, e.g.:
 ~/tc66c2mqtt$ ./cli.py --help
 ```
 Output looks like:
+
 [comment]: <> (✂✂✂ auto generated main help start ✂✂✂)
 ```
 usage: ./cli.py [-h]
@@ -84,6 +85,7 @@ Create dev virtualenv:
 ~/tc66c2mqtt$ ./dev-cli.py --help
 ```
 Output looks like:
+
 [comment]: <> (✂✂✂ auto generated dev help start ✂✂✂)
 ```
 usage: ./dev-cli.py [-h]
